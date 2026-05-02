@@ -9,9 +9,9 @@ export const ENDPOINTS = {
 };
 
 export const NOTIFICATION_TYPE_COLORS: Record<string, string> = {
-  Event: '#2196F3',
-  Result: '#4CAF50',
-  Placement: '#FF9800',
+  Event: '#B3D9FF',
+  Result: '#A8E6A8',
+  Placement: '#FFD4A3',
 };
 
 export const DEFAULT_LIMIT = 10;

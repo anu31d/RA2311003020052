@@ -19,14 +19,15 @@ export default function NotificationCard({ notification, isViewed, onView }: Not
       sx={{
         mb: 2,
         cursor: 'pointer',
-        backgroundColor: isViewed ? '#f9f9f9' : '#fff',
+        backgroundColor: isViewed ? '#FFF0F3' : '#FFFBFC',
         opacity: isViewed ? 0.7 : 1,
         transition: 'all 0.2s ease',
         '&:hover': {
           boxShadow: 3,
           transform: 'translateY(-2px)',
+          backgroundColor: '#FFF5F8',
         },
-        border: isViewed ? '1px solid #ddd' : '2px solid #1976d2',
+        border: isViewed ? '1px solid #E8C8D5' : '2px solid #FFB6C1',
       }}
     >
       <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
@@ -52,7 +53,7 @@ export default function NotificationCard({ notification, isViewed, onView }: Not
                 size="small"
                 sx={{
                   backgroundColor: NOTIFICATION_TYPE_COLORS[notification.Type],
-                  color: '#fff',
+                  color: '#333',
                   fontSize: { xs: '0.7rem', sm: '0.8rem' }
                 }}
               />
@@ -61,8 +62,8 @@ export default function NotificationCard({ notification, isViewed, onView }: Not
                   label="New"
                   size="small"
                   sx={{
-                    backgroundColor: '#FF5722',
-                    color: '#fff',
+                    backgroundColor: '#FFB6C1',
+                    color: '#333',
                     fontSize: { xs: '0.7rem', sm: '0.8rem' }
                   }}
                 />
@@ -72,7 +73,7 @@ export default function NotificationCard({ notification, isViewed, onView }: Not
           <Typography 
             variant="caption" 
             sx={{ 
-              color: '#999', 
+              color: '#B8A0A8', 
               whiteSpace: 'nowrap',
               fontSize: { xs: '0.7rem', sm: '0.85rem' }
             }}

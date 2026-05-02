@@ -8,7 +8,7 @@ export default function Navigation() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: '#1976d2' }}>
+    <AppBar position="sticky" sx={{ backgroundColor: '#FFB6C1', color: '#333' }}>
       <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
         <Typography 
           variant={isMobile ? 'body1' : 'h6'} 
@@ -19,27 +19,24 @@ export default function Navigation() {
         <Box sx={{ display: 'flex', gap: { xs: 0.5, sm: 2 }, flexWrap: 'nowrap' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <Button 
-              color="inherit" 
               size={isMobile ? 'small' : 'medium'}
-              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' }, color: '#333', '&:hover': { backgroundColor: '#FFD4E5' } }}
             >
               All
             </Button>
           </Link>
           <Link href="/priority" style={{ textDecoration: 'none' }}>
             <Button 
-              color="inherit" 
               size={isMobile ? 'small' : 'medium'}
-              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' }, color: '#333', '&:hover': { backgroundColor: '#FFD4E5' } }}
             >
               Priority
             </Button>
           </Link>
           <Link href="/filter" style={{ textDecoration: 'none' }}>
             <Button 
-              color="inherit" 
               size={isMobile ? 'small' : 'medium'}
-              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' }, color: '#333', '&:hover': { backgroundColor: '#FFD4E5' } }}
             >
               Filter
             </Button>
