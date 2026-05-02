@@ -3,7 +3,7 @@ import cors from 'cors';
 import { config, validateConfig } from './config';
 import { authMiddleware } from './middleware/authMiddleware';
 import { errorMiddleware } from './middleware/errorMiddleware';
-import { expressLoggingMiddleware } from '../logging_middleware';
+import { expressLoggingMiddleware } from './utils/logger';
 import notificationRoutes from './routes/notificationRoutes';
 
 const app = express();

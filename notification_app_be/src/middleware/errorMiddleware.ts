@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { getLogger } from '../../logging_middleware';
+import { getLogger } from '../utils/logger';
 
 const logger = getLogger();
 

@@ -17,6 +17,8 @@ class AuthService {
         accessCode: config.accessCode,
         clientID: config.clientId,
         clientSecret: config.clientSecret,
+      }, {
+        timeout: 10000,
       });
 
       this.token = response.data.access_token;

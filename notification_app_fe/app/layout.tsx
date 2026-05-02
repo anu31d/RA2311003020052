@@ -1,3 +1,6 @@
+import Navigation from '@/components/Navigation';
+import './globals.css';
+
 export const metadata = {
   title: 'Notifications',
   description: 'Notification Management System',
@@ -10,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Navigation />
+        {children}
+      </body>
     </html>
   );
 }

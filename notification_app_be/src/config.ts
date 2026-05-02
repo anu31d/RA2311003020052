@@ -21,17 +21,7 @@ export const config = {
 };
 
 export function validateConfig(): void {
-  const required = [
-    'clientId',
-    'clientSecret',
-    'email',
-    'name',
-    'rollNo',
-    'accessCode',
-    'authApiUrl',
-    'notificationsApiUrl',
-  ];
-
+  const required = ['clientId', 'clientSecret', 'email', 'accessCode', 'authApiUrl', 'notificationsApiUrl'];
   const missing = required.filter((key) => !config[key as keyof typeof config]);
 
   if (missing.length > 0) {

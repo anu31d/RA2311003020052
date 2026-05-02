@@ -1,15 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Container, Box, CircularProgress, Alert, Pagination } from '@mui/material';
-import { fetchNotifications } from '@/lib/apiClient';
+import { Container, Box, ToggleButton, ToggleButtonGroup, CircularProgress, Alert, Typography, Pagination } from '@mui/material';
+import { fetchNotificationsByType } from '@/lib/apiClient';
 import NotificationCard from '@/components/NotificationCard';
 import { Notification, ApiError, ViewedNotification } from '@/lib/types';
-import { DEFAULT_LIMIT, DEFAULT_PAGE } from '@/lib/constants';
+import { NOTIFICATION_TYPES, DEFAULT_LIMIT, DEFAULT_PAGE } from '@/lib/constants';
 
-export default function Home() {
+export default function FilterPage() {
+  const [selectedType, setSelectedType] = useState<string | null>('Event');
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
   const [viewed, setViewed] = useState<ViewedNotification>({});
   const [page, setPage] = useState(DEFAULT_PAGE);
@@ -24,10 +25,12 @@ export default function Home() {
 
   useEffect(() => {
     const loadNotifications = async () => {
+      if (!selectedType) return;
+
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchNotifications({
+        const data = await fetchNotificationsByType(selectedType as any, {
           limit: DEFAULT_LIMIT,
           page,
         });
@@ -41,12 +44,19 @@ export default function Home() {
     };
 
     loadNotifications();
-  }, [page]);
+  }, [selectedType, page]);
 
   const handleNotificationView = (id: string) => {
     const updated = { ...viewed, [id]: true };
     setViewed(updated);
     localStorage.setItem('viewedNotifications', JSON.stringify(updated));
+  };
+
+  const handleTypeChange = (event: React.MouseEvent<HTMLElement>, newType: string | null) => {
+    if (newType !== null) {
+      setSelectedType(newType);
+      setPage(DEFAULT_PAGE);
+    }
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -57,6 +67,30 @@ export default function Home() {
   return (
     <Container maxWidth="md">
       <Box sx={{ py: { xs: 2, sm: 4 } }}>
+        <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>
+          Filter by Type
+        </Typography>
+
+        <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+          <ToggleButtonGroup 
+            value={selectedType} 
+            exclusive 
+            onChange={handleTypeChange}
+            sx={{
+              '& .MuiToggleButton-root': {
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                px: { xs: 1, sm: 2 }
+              }
+            }}
+          >
+            {NOTIFICATION_TYPES.map((type) => (
+              <ToggleButton key={type} value={type}>
+                {type}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </Box>
+
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
             <CircularProgress />
@@ -91,7 +125,7 @@ export default function Home() {
           </Box>
         )}
         {!loading && notifications.length === 0 && !error && (
-          <Alert severity="info">No notifications available</Alert>
+          <Alert severity="info">No notifications found for this type</Alert>
         )}
       </Box>
     </Container>

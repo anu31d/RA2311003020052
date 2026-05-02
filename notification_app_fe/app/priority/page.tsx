@@ -1,19 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Container, Box, CircularProgress, Alert, Pagination } from '@mui/material';
+import { Container, Box, CircularProgress, Alert, Typography } from '@mui/material';
 import { fetchNotifications } from '@/lib/apiClient';
 import NotificationCard from '@/components/NotificationCard';
 import { Notification, ApiError, ViewedNotification } from '@/lib/types';
-import { DEFAULT_LIMIT, DEFAULT_PAGE } from '@/lib/constants';
+import { PRIORITY_LIMIT } from '@/lib/constants';
 
-export default function Home() {
+export default function PriorityPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
   const [viewed, setViewed] = useState<ViewedNotification>({});
-  const [page, setPage] = useState(DEFAULT_PAGE);
-  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const savedViewed = localStorage.getItem('viewedNotifications');
@@ -28,11 +26,10 @@ export default function Home() {
         setLoading(true);
         setError(null);
         const data = await fetchNotifications({
-          limit: DEFAULT_LIMIT,
-          page,
+          limit: PRIORITY_LIMIT,
+          page: 1,
         });
-        setNotifications(data.notifications);
-        setTotalPages(Math.ceil((data.notifications.length + DEFAULT_LIMIT - 1) / DEFAULT_LIMIT));
+        setNotifications(data.notifications.slice(0, PRIORITY_LIMIT));
       } catch (err) {
         setError(err as ApiError);
       } finally {
@@ -41,7 +38,7 @@ export default function Home() {
     };
 
     loadNotifications();
-  }, [page]);
+  }, []);
 
   const handleNotificationView = (id: string) => {
     const updated = { ...viewed, [id]: true };
@@ -49,14 +46,13 @@ export default function Home() {
     localStorage.setItem('viewedNotifications', JSON.stringify(updated));
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <Container maxWidth="md">
       <Box sx={{ py: { xs: 2, sm: 4 } }}>
+        <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>
+          Priority Notifications (Top {PRIORITY_LIMIT})
+        </Typography>
+
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
             <CircularProgress />
@@ -77,17 +73,6 @@ export default function Home() {
                 onView={handleNotificationView}
               />
             ))}
-            {totalPages > 1 && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                <Pagination 
-                  count={totalPages} 
-                  page={page} 
-                  onChange={handlePageChange}
-                  color="primary"
-                  size="small"
-                />
-              </Box>
-            )}
           </Box>
         )}
         {!loading && notifications.length === 0 && !error && (

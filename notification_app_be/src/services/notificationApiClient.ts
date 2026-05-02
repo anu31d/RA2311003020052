@@ -20,6 +20,7 @@ class NotificationApiClient {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        timeout: 10000,
       });
 
       return response.data;

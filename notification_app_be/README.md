@@ -1,44 +1,45 @@
 # Backend - Notification System
 
-Backend service for fetching notifications from external API.
+Express.js server for managing notifications through external API integration.
 
-## Setup
+## Quick Start
 
 1. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-2. Create `.env` file (copy from `.env.example`):
-   ```bash
-   cp .env.example .env
-   ```
+2. Create `.env` file:
+```bash
+cp .env.example .env
+```
 
-3. Update `.env` with your credentials
+3. Update `.env` with API credentials
 
-## Development
-
-Run in development mode:
+4. Run development server:
 ```bash
 npm run dev
 ```
 
-## Build
+Server runs on `http://localhost:5000`
 
-Build TypeScript to JavaScript:
+## Build & Production
+
 ```bash
 npm run build
-```
-
-## Production
-
-Start production server:
-```bash
 npm start
 ```
 
-## Endpoints
+## API Routes
 
-- `GET /health` - Health check
+- `GET /health` - Health check endpoint
+- `GET /api/notifications?limit=10&page=1&notification_type=Event` - Fetch notifications
 
-(More endpoints will be added in subsequent phases)
+## Features
+
+- Bearer token authentication
+- Query parameter validation (limit, page, notification_type)
+- Error handling and validation
+- Request/response logging
+- CORS enabled
+- TypeScript support
