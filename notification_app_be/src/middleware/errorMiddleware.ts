@@ -11,8 +11,11 @@ export function errorMiddleware(err: any, req: Request, res: Response, next: Nex
     message: err.message,
   });
 
-  res.status(err.statusCode || 500).json({
-    message: err.message || 'Internal Server Error',
-    statusCode: err.statusCode || 500,
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+
+  res.status(statusCode).json({
+    message,
+    statusCode,
   });
 }

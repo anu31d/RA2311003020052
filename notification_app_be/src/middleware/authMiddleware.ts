@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from '../services/authService';
+import { AuthenticationError } from '../utils/errors';
 
 export interface AuthenticatedRequest extends Request {
   token?: string;
@@ -11,9 +12,10 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
     req.token = token;
     next();
   } catch (error) {
-    res.status(401).json({
-      message: 'Authentication failed',
-      details: error instanceof Error ? error.message : 'Unknown error',
+    const authError = new AuthenticationError();
+    res.status(authError.statusCode).json({
+      message: authError.message,
+      statusCode: authError.statusCode,
     });
   }
 }

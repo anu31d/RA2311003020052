@@ -2,6 +2,7 @@ import axios from 'axios';
 import { config } from '../config';
 import { NotificationsResponse, QueryParams } from '../types';
 import authService from './authService';
+import { ApiError } from '../utils/errors';
 
 class NotificationApiClient {
   async getNotifications(params: QueryParams): Promise<NotificationsResponse> {
@@ -23,7 +24,10 @@ class NotificationApiClient {
 
       return response.data;
     } catch (error) {
-      throw new Error(`Failed to fetch notifications: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      if (axios.isAxiosError(error)) {
+        throw new ApiError(error.response?.status || 500, `API Error: ${error.message}`);
+      }
+      throw new ApiError(500, error instanceof Error ? error.message : 'Failed to fetch notifications');
     }
   }
 }
