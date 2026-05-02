@@ -4,6 +4,7 @@ import { config, validateConfig } from './config';
 import { authMiddleware } from './middleware/authMiddleware';
 import { errorMiddleware } from './middleware/errorMiddleware';
 import { expressLoggingMiddleware } from '../logging_middleware';
+import notificationRoutes from './routes/notificationRoutes';
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.use('/api/', authMiddleware);
+app.use('/api/', authMiddleware, notificationRoutes);
 
 app.use(errorMiddleware);
 
