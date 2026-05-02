@@ -1,19 +1,24 @@
 import express from 'express';
 import cors from 'cors';
 import { config, validateConfig } from './config';
+import { authMiddleware } from './middleware/authMiddleware';
+import { errorMiddleware } from './middleware/errorMiddleware';
+import { expressLoggingMiddleware } from '../logging_middleware';
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(expressLoggingMiddleware());
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Initialize and start server
+app.use('/api/', authMiddleware);
+
+app.use(errorMiddleware);
+
 async function start(): Promise<void> {
   try {
     validateConfig();
