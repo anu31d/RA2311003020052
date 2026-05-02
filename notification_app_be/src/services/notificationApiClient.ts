@@ -2,10 +2,22 @@ import axios from 'axios';
 import { config } from '../config';
 import { NotificationsResponse, QueryParams } from '../types';
 import authService from './authService';
+import { getMockNotifications } from './mockData';
 import { ApiError } from '../utils/errors';
 
 class NotificationApiClient {
   async getNotifications(params: QueryParams): Promise<NotificationsResponse> {
+    // Use mock data in debug mode
+    if (process.env.DEBUG_MODE === 'true') {
+      console.log('Using mock data (DEBUG_MODE enabled)');
+      const mockData = getMockNotifications(
+        params.limit || 10,
+        params.page || 1,
+        params.notification_type
+      );
+      return { notifications: mockData };
+    }
+
     try {
       const token = await authService.getToken();
 
@@ -25,6 +37,17 @@ class NotificationApiClient {
 
       return response.data;
     } catch (error) {
+      // Fallback to mock data in development
+      if (config.nodeEnv === 'development') {
+        console.log('Using mock data (API unavailable)');
+        const mockData = getMockNotifications(
+          params.limit || 10,
+          params.page || 1,
+          params.notification_type
+        );
+        return { notifications: mockData };
+      }
+
       if (axios.isAxiosError(error)) {
         throw new ApiError(error.response?.status || 500, `API Error: ${error.message}`);
       }

@@ -26,6 +26,13 @@ class AuthService {
 
       return this.token;
     } catch (error) {
+      // Fallback to mock token in development
+      if (config.nodeEnv === 'development') {
+        console.log('Using mock token (Auth unavailable)');
+        this.token = `mock_token_${Date.now()}`;
+        this.tokenExpiry = Date.now() + (3600 * 1000); // 1 hour expiry
+        return this.token;
+      }
       throw new Error(`Authentication failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
